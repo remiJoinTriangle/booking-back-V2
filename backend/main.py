@@ -3,8 +3,8 @@ from fastapi import FastAPI, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 
-from database import init_db, AsyncSessionLocal
-from models import User
+from .database import init_db, AsyncSessionLocal
+from .models import User
 
 
 @asynccontextmanager

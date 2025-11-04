@@ -3,20 +3,20 @@ from sqlalchemy import pool
 from sqlalchemy.ext.asyncio import async_engine_from_config
 from alembic import context
 
-from models import AstraBase  # adjust import if needed
+from ..models import AstraBase
 
 # Alembic Config object
 config = context.config
 
-# --- Optional: override DB URL dynamically ---
-# Example: load from .env if you prefer
-# from dotenv import load_dotenv
-# import os
-# load_dotenv()
-# config.set_main_option(
-#     "sqlalchemy.url",
-#     os.getenv("DATABASE_URL", "postgresql+psycopg2://postgres:YOUR_PASSWORD@localhost:5432/astra")
-# )
+# Load database URL from environment variable
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+config.set_main_option(
+    "sqlalchemy.url",
+    os.getenv("DATABASE_URL", "postgresql+asyncpg://localhost:5432/astra")
+)
 
 # Configure logging
 if config.config_file_name is not None:

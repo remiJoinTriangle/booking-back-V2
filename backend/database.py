@@ -1,7 +1,13 @@
+import os
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
-from models import AstraBase
+from dotenv import load_dotenv
+from .models import AstraBase
 
-DATABASE_URL = "postgresql+asyncpg://pierrelorindereure@localhost:5432/astra"
+load_dotenv()
+
+DATABASE_URL = os.getenv(
+    "DATABASE_URL", "postgresql+asyncpg://localhost:5432/astra"
+)
 
 # Création de l'engine asynchrone
 engine = create_async_engine(DATABASE_URL, echo=True)
