@@ -1,6 +1,8 @@
 from pydantic import BaseModel
 from typing import List, Any, Dict
 
+from .review import ReviewResponse
+
 
 class HotelResponse(BaseModel):
     id: int
@@ -52,7 +54,7 @@ class HotelDetailResponse(BaseModel):
     starRating: float
     commentAggregatedRating: float
     countOfComment: int
-    comments: List[Dict[str, Any]]
+    comments: List[ReviewResponse]
     highlights: List[Dict[str, Any]]
     date: Dict[str, Any]
     matchingFlag: Dict[str, Any]

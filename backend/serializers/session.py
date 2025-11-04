@@ -82,7 +82,7 @@ class SessionListResponse(BaseModel):
 
 
 class CreateSessionParameters(BaseModel):
-    message: Optional[str] = None
+    message: str
     enrichedPrompt: str = ""
 
 
