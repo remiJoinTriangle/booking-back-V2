@@ -65,3 +65,11 @@ uvicorn backend.main:app --reload
 ```
 
 Note: Make sure PostgreSQL is running and the database `astra` exists at `localhost:5432`. Update the `DATABASE_URL` in your `.env` file with your PostgreSQL username.
+
+## (Optional) Importing a Database Dump
+
+If you have a SQL dump in a file `astra_dump.sql`, run:
+
+```bash
+psql -d astra -f astra_dump.sql
+```
