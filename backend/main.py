@@ -3,8 +3,9 @@ from fastapi import FastAPI, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 
-from .database import init_db, AsyncSessionLocal
+from .database import init_db, get_db
 from .models import User
+from .endpoints import api_router
 
 
 @asynccontextmanager
@@ -18,17 +19,13 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(
-    title="Hotel API",
-    version="1.0.0",
-    description="Example FastAPI app using SQLAlchemy 2.0 async ORM",
+    title="Astra backend",
+    version="2.0",
     lifespan=lifespan,
 )
 
-
-# --- Dépendance pour obtenir une session SQLAlchemy ---
-async def get_db() -> AsyncSession:
-    async with AsyncSessionLocal() as session:
-        yield session
+# Include API routers
+app.include_router(api_router)
 
 
 # --- Exemple de route ---
@@ -64,4 +61,4 @@ async def get_user(user_id: int, db: AsyncSession = Depends(get_db)):
 
 @app.get("/")
 async def root():
-    return {"message": "FastAPI 1.0 with SQLAlchemy 2.0 async is running 🚀"}
+    return {"message": "Server up and running 🚀"}
