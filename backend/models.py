@@ -2,13 +2,11 @@ from sqlalchemy import (
     BigInteger,
     SmallInteger,
     Integer,
-    String,
     Text,
     Boolean,
     Float,
     Double,
     ForeignKey,
-    UniqueConstraint,
     JSON,
 )
 from sqlalchemy.orm import DeclarativeBase, relationship, Mapped, mapped_column
