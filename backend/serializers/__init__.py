@@ -1,4 +1,3 @@
-from .error import ErrorResponse
 from .hotel import HotelResponse, HotelDetailResponse
 from .session import (
     SessionResponse,
@@ -11,7 +10,6 @@ from .session import (
 )
 
 __all__ = [
-    "ErrorResponse",
     "HotelResponse",
     "HotelDetailResponse",
     "SessionResponse",

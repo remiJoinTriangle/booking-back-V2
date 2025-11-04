@@ -115,6 +115,7 @@ class UpdateSessionDateParameters(BaseModel):
 class UpdateSessionFiltersParameters(BaseModel):
     model_config = ConfigDict(alias_generator=to_camel, populate_by_name=True)
 
+    # TODO: use proper amenity/vibe enums/tables
     air_conditioning: bool = False
     airport_shuttle: bool = False
     baby_sitting: bool = False
@@ -164,6 +165,8 @@ class UpdateSessionFiltersParameters(BaseModel):
     super_luxury: bool = False
     villa: bool = False
     wellness: bool = False
+
+    # TODO: use proper null values instead of -1
     price: int = -1
     min_price: int = -1
     max_price: int = -1
