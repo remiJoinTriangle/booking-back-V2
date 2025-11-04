@@ -97,7 +97,7 @@ async def create_message(
         function_argument_string="",
         tool_id="",
     )
-    
+
     db.add(message)
     await db.flush()
     await db.refresh(message)

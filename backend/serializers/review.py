@@ -35,4 +35,3 @@ class ReviewResponse(BaseModel):
             rating=review.rating,
             compact_address=review.compact_address,
         )
-

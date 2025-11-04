@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, BackgroundTasks
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from ...database import get_db
-from ...serializers import CreateSessionParameters, SessionWithHotelsResponse, SessionResponse, HotelResponse
+from ...serializers import CreateSessionParameters, SessionWithHotelsResponse, SessionResponse
 from ...services.session_service import (
     create_session,
     create_message,
