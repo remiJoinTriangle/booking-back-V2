@@ -38,5 +38,5 @@ async def get_session(session_id: int, db: AsyncSession = Depends(get_db)):
         **session_response.model_dump(),
         message=None,  # TODO: Get and return the last message
         hotels=formatted_hotels,
-        allVibes=[],  # TODO: Build and return all vibes list
+        all_vibes=[],  # TODO: Build and return all vibes list
     )

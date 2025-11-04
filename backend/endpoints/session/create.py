@@ -29,7 +29,7 @@ async def start_session(
         db=db,
         owner_id=1,  # Stub. TODO: Get actual user ID from authentication
         message=arguments.message,
-        enriched_prompt=arguments.enrichedPrompt or "",
+        enriched_prompt=arguments.enriched_prompt or "",
     )
 
     # Add initial message with date of the day
@@ -62,5 +62,5 @@ async def start_session(
         **session_response.model_dump(),
         message=None,
         hotels=[],  # New sessions have no hotels yet
-        allVibes=[],  # TODO: Return all vibes
+        all_vibes=[],  # TODO: Return all vibes
     )

@@ -65,5 +65,5 @@ async def post_message(
         **session_response.model_dump(),
         message=last_message.text if last_message else None,
         hotels=formatted_hotels,
-        allVibes=[],  # TODO: Return all vibes
+        all_vibes=[],  # TODO: Return all vibes
     )

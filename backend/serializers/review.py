@@ -1,14 +1,17 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
+from pydantic.alias_generators import to_camel
 from datetime import datetime
 
 
 class ReviewResponse(BaseModel):
+    model_config = ConfigDict(alias_generator=to_camel, populate_by_name=True)
+
     avatar: str
-    userName: str
+    user_name: str
     date: str
     review: str
     rating: int
-    compactAddress: str
+    compact_address: str
 
     @classmethod
     def from_orm(cls, review):
@@ -26,10 +29,10 @@ class ReviewResponse(BaseModel):
 
         return cls(
             avatar=avatar,
-            userName=review.user_name,
+            user_name=review.user_name,
             date=date_str,
             review=review.text,
             rating=review.rating,
-            compactAddress=review.compact_address,
+            compact_address=review.compact_address,
         )
 

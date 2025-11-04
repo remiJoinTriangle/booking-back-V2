@@ -57,5 +57,5 @@ async def change_filters_of_session(
         **session_response.model_dump(),
         message=last_message.text if last_message else None,
         hotels=formatted_hotels,
-        allVibes=[],  # TODO: Return session vibes
+        all_vibes=[],  # TODO: Return session vibes
     )

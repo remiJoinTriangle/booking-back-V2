@@ -35,12 +35,12 @@ async def change_date_of_session(
     session = await update_session_dates(
         db=db,
         session=session,
-        start_day=arguments.startDay,
-        end_day=arguments.endDay,
-        start_month=arguments.startMonth,
-        end_month=arguments.endMonth,
-        start_year=arguments.startYear,
-        end_year=arguments.endYear,
+        start_day=arguments.start_day,
+        end_day=arguments.end_day,
+        start_month=arguments.start_month,
+        end_month=arguments.end_month,
+        start_year=arguments.start_year,
+        end_year=arguments.end_year,
     )
 
     await db.commit()
@@ -59,5 +59,5 @@ async def change_date_of_session(
         **session_response.model_dump(),
         message=last_message.text if last_message else None,
         hotels=formatted_hotels,
-        allVibes=[],  # TODO: Return session vibes
+        all_vibes=[],  # TODO: Return session vibes
     )
