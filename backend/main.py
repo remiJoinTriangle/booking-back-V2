@@ -44,7 +44,7 @@ async def create_user(name: str, db: AsyncSession = Depends(get_db)):
         recurrence_of_stay=3,
         business_or_leisure=3,
         hotel_or_villa=3,
-        token_hash=0,
+        token_hash=1231241232,
         avatar_asset_id=1,
     )
     db.add(user)
