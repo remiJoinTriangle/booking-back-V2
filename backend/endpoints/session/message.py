@@ -3,7 +3,7 @@ from fastapi.responses import ORJSONResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from ...database import get_db
-from ...serializers import HttpPostSessionMessageArguments, SessionWithHotelsResponse, ErrorResponse
+from ...serializers import AddSessionMessageParameters, SessionWithHotelsResponse, ErrorResponse
 
 router = APIRouter(prefix="/session", tags=["session"])
 
@@ -11,7 +11,7 @@ router = APIRouter(prefix="/session", tags=["session"])
 @router.post("/{session_id}/message", response_model=SessionWithHotelsResponse)
 async def add_message_to_session(
     session_id: int,
-    arguments: HttpPostSessionMessageArguments,
+    arguments: AddSessionMessageParameters,
     background: BackgroundTasks = None,
     db: AsyncSession = Depends(get_db)
 ):

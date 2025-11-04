@@ -9,7 +9,7 @@ router = APIRouter(prefix="/session", tags=["session"])
 
 
 @router.get("/{session_id}/hotel/{hotel_id}", response_model=HotelDetailResponse)
-async def get_hotel_page_for_session(
+async def get_session_hotel_detail(
     session_id: int,
     hotel_id: int,
     db: AsyncSession = Depends(get_db)

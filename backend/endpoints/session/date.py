@@ -3,7 +3,7 @@ from fastapi.responses import ORJSONResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from ...database import get_db
-from ...serializers import HttpPostSessionDateArguments, SessionWithHotelsResponse
+from ...serializers import UpdateSessionDateParameters, SessionWithHotelsResponse
 
 router = APIRouter(prefix="/session", tags=["session"])
 
@@ -11,7 +11,7 @@ router = APIRouter(prefix="/session", tags=["session"])
 @router.post("/{session_id}/date", response_model=SessionWithHotelsResponse)
 async def change_date_of_session(
     session_id: int,
-    arguments: HttpPostSessionDateArguments,
+    arguments: UpdateSessionDateParameters,
     db: AsyncSession = Depends(get_db)
 ):
     """

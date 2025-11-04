@@ -3,7 +3,7 @@ from fastapi.responses import ORJSONResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from ...database import get_db
-from ...serializers import HttpPostSessionFiltersArguments, SessionWithHotelsResponse
+from ...serializers import UpdateSessionFiltersParameters, SessionWithHotelsResponse
 
 router = APIRouter(prefix="/session", tags=["session"])
 
@@ -11,7 +11,7 @@ router = APIRouter(prefix="/session", tags=["session"])
 @router.post("/{session_id}/filters", response_model=SessionWithHotelsResponse)
 async def change_filters_of_session(
     session_id: int,
-    arguments: HttpPostSessionFiltersArguments,
+    arguments: UpdateSessionFiltersParameters,
     db: AsyncSession = Depends(get_db)
 ):
     """

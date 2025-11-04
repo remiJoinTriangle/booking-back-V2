@@ -1,28 +1,7 @@
-from pydantic import BaseModel, confloat
+from pydantic import BaseModel
 from typing import Optional, List, Any, Dict
 
-
-# Response models
-class ErrorResponse(BaseModel):
-    errorMessage: str
-
-
-class HotelResponse(BaseModel):
-    id: int
-    name: str
-    price: int
-    longitude: float
-    latitude: float
-    thumbnails: List[str]
-    vibes: List[str]
-    starRating: float
-    commentAggregatedRating: float
-    countOfComment: int
-    flag: Dict[str, Any]
-    vibeFlag: Dict[str, Any]
-    matchingReason: str
-    matchingFlag: Dict[str, Any]
-    matchingVibeFlag: Dict[str, Any]
+from .hotel import HotelResponse
 
 
 class SessionResponse(BaseModel):
@@ -54,7 +33,42 @@ class SessionResponse(BaseModel):
     filterMaxPrice: int
     minStarRating: int
     minReviewRating: float
-    number_of_rooms: Optional[Dict[str, Any]] = None
+    numberOfRooms: Optional[List[Dict[str, Any]]] = None
+
+    @classmethod
+    def from_orm(cls, session):
+        """Create SessionResponse from Session ORM model."""
+        return cls(
+            id=session.id,
+            name=session.name,
+            status=session.status,
+            longitude=session.longitude,
+            latitude=session.latitude,
+            zoom=session.zoom,
+            lastInteractedInSecond=session.last_interacted,
+            startDay=session.start_day,
+            endDay=session.end_day,
+            startMonth=session.start_month,
+            endMonth=session.end_month,
+            startYear=session.start_year,
+            endYear=session.end_year,
+            ownerId=session.owner_id,
+            flag={},  # TODO: Convert flag to dict
+            vibes=session.vibes.split(",") if session.vibes else [],
+            price=session.price,
+            countOfRoom=session.count_of_room,
+            userPrompt=session.user_prompt,
+            vibeFlag={},  # TODO: Convert vibe_flag to dict
+            packedDate=session.packed_date,
+            enrichedPrompt=session.enriched_prompt,
+            initialMinPrice=session.initial_min_price,
+            initialMaxPrice=session.initial_max_price,
+            filterMinPrice=session.filter_min_price,
+            filterMaxPrice=session.filter_max_price,
+            minStarRating=session.min_star_rating,
+            minReviewRating=session.min_review_rating,
+            numberOfRooms=session.number_of_rooms,
+        )
 
 
 class SessionWithHotelsResponse(SessionResponse):
@@ -67,52 +81,16 @@ class SessionListResponse(BaseModel):
     sessions: List[SessionResponse]
 
 
-class HotelDetailResponse(BaseModel):
-    id: int
-    description: str
-    name: str
-    latitude: float
-    longitude: float
-    vibes: List[str]
-    price: int
-    starRating: float
-    commentAggregatedRating: float
-    countOfComment: int
-    comments: List[Dict[str, Any]]
-    highlights: List[Dict[str, Any]]
-    date: Dict[str, Any]
-    matchingFlag: Dict[str, Any]
-    matchingVibeFlag: Dict[str, Any]
-    matchingReason: str
-    startDay: int
-    endDay: int
-    startMonth: int
-    endMonth: int
-    startYear: int
-    endYear: int
-    images: List[str]
-    imageLists: List[str]
-    mainImage: str
-    url: str
-
-
-# Session request models
-class HttpPostSessionArguments(BaseModel):
+class CreateSessionParameters(BaseModel):
     message: Optional[str] = None
     enrichedPrompt: str = ""
 
 
-class HttpPostSessionMessageArguments(BaseModel):
+class AddSessionMessageParameters(BaseModel):
     message: Optional[str] = None
 
 
-class HttpPostSessionMapArguments(BaseModel):
-    latitude: confloat(ge=-90.0, le=90.0)
-    longitude: confloat(ge=-180.0, le=180.0)
-    zoom: int
-
-
-class HttpPostSessionDateArguments(BaseModel):
+class UpdateSessionDateParameters(BaseModel):
     startDay: int = -1
     endDay: int = -1
     startMonth: int = -1
@@ -123,11 +101,7 @@ class HttpPostSessionDateArguments(BaseModel):
     months: Optional[List[Any]] = None
 
 
-class HttpPostSessionVibeArguments(BaseModel):
-    vibe: str
-
-
-class HttpPostSessionFiltersArguments(BaseModel):
+class UpdateSessionFiltersParameters(BaseModel):
     airConditioning: bool = False
     airportShuttle: bool = False
     babySitting: bool = False
@@ -182,7 +156,3 @@ class HttpPostSessionFiltersArguments(BaseModel):
     maxPrice: int = -1
     minStarRating: int = -1
     minReviewRating: int = -1
-
-
-class HttpPostSessionPromptArguments(BaseModel):
-    prompt: str
