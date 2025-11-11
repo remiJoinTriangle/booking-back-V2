@@ -22,13 +22,12 @@ brew services start postgresql
 createdb astra
 ```
 
-
 ### Python Setup
 
 4. Create virtual environment (if not already created):
 
 ```bash
-python3 -m venv venv
+python -m venv venv
 ```
 
 5. Activate virtual environment:
@@ -51,10 +50,17 @@ pip install -r requirements.txt
 cp .env.example .env
 ```
 
-Then edit `.env` and update the `DATABASE_URL` with your PostgreSQL username:
+Then edit `.env` and update the `DATABASE_URL` with your PostgreSQL username and `OPENAI_API_KEY` with an OpenAI API key:
 
 ```
 DATABASE_URL=postgresql+asyncpg://your_username@localhost:5432/astra
+OPENAI_API_KEY=your_openai_api_key
+```
+
+8. Run intial migrations:
+
+```bash
+alembic upgrade head
 ```
 
 ## Running the Server
@@ -73,4 +79,18 @@ If you have a SQL dump in a file `astra_dump.sql`, run:
 
 ```bash
 psql -d astra -f astra_dump.sql
+```
+
+### Migrations
+
+To create a new migration, run:
+
+```bash
+alembic revision --autogenerate -m "Add new table"
+```
+
+To apply the migration, run:
+
+```bash
+alembic upgrade head
 ```
