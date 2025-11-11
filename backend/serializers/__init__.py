@@ -1,10 +1,11 @@
-from .hotel import HotelResponse, HotelDetailResponse
+from .hotel import HotelDetailResponse, HotelResponse
 from .session import (
+    AddSessionMessageParameters,
+    CreateSessionParameters,
+    MessageResponse,
+    SessionListResponse,
     SessionResponse,
     SessionWithHotelsResponse,
-    SessionListResponse,
-    CreateSessionParameters,
-    AddSessionMessageParameters,
     UpdateSessionDateParameters,
     UpdateSessionFiltersParameters,
 )
@@ -19,4 +20,5 @@ __all__ = [
     "AddSessionMessageParameters",
     "UpdateSessionDateParameters",
     "UpdateSessionFiltersParameters",
+    "MessageResponse",
 ]

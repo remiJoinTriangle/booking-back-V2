@@ -1,15 +1,16 @@
 from sqlalchemy import (
-    BigInteger,
-    SmallInteger,
-    Integer,
-    Text,
-    Boolean,
-    Float,
-    Double,
-    ForeignKey,
     JSON,
+    BigInteger,
+    Boolean,
+    Double,
+    Float,
+    ForeignKey,
+    Integer,
+    SmallInteger,
+    String,
+    Text,
 )
-from sqlalchemy.orm import DeclarativeBase, relationship, Mapped, mapped_column
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 
 
 class AstraBase(DeclarativeBase):
@@ -228,6 +229,7 @@ class User(AstraBase):
     __tablename__ = "user"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    auth0_id = mapped_column(String(128), unique=True, nullable=False, index=True)
     name: Mapped[str] = mapped_column(Text)
     last_name: Mapped[str] = mapped_column(Text, default="")
     age: Mapped[int] = mapped_column(SmallInteger, nullable=True)  # FIXME
@@ -237,18 +239,24 @@ class User(AstraBase):
     recurrence_of_stay: Mapped[int] = mapped_column(SmallInteger, default=3)
     business_or_leisure: Mapped[int] = mapped_column(SmallInteger, default=3)
     hotel_or_villa: Mapped[int] = mapped_column(SmallInteger, default=3)
-    token_hash: Mapped[int] = mapped_column(BigInteger, unique=True, default=0)
-    avatar_asset_id: Mapped[int] = mapped_column(BigInteger, ForeignKey("asset.id"))
+    token_hash: Mapped[int] = mapped_column(BigInteger, unique=True, nullable=True)
+    avatar_asset_id: Mapped[int] = mapped_column(
+        BigInteger, ForeignKey("asset.id"), nullable=True
+    )
 
     avatar_asset = relationship("Asset", back_populates="users")
     activities = relationship(
-        "Activity", secondary="join_user_activity", back_populates="users"
+        "Activity",
+        secondary="join_user_activity",
+        back_populates="users",
     )
     amenities = relationship(
         "Amenity", secondary="join_user_amenity", back_populates="users"
     )
     food_habits = relationship(
-        "FoodHabit", secondary="join_user_food_habit", back_populates="users"
+        "FoodHabit",
+        secondary="join_user_food_habit",
+        back_populates="users",
     )
     sports = relationship("Sport", secondary="join_user_sport", back_populates="users")
     sessions = relationship(

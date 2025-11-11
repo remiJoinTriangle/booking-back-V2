@@ -1,21 +1,20 @@
 from contextlib import asynccontextmanager
-from fastapi import FastAPI, Depends, HTTPException, status
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select
 
-from .database import init_db, get_db
-from .models import User
+from dotenv import load_dotenv
+from fastapi import Depends, FastAPI, HTTPException, status
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from .database import get_db, init_db
 from .endpoints import api_router
+from .models import User
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Démarrage : création des tables si elles n'existent pas
+    load_dotenv()
     await init_db()
-    print("✅ Database initialized.")
     yield
-    # Arrêt éventuel : fermeture des ressources
-    print("🛑 Application shutting down.")
 
 
 app = FastAPI(
@@ -34,14 +33,14 @@ async def create_user(name: str, db: AsyncSession = Depends(get_db)):
     user = User(
         name=name,
         last_name="",
-        age=23,
+        age=32,
         account_created_at=0,
         phone_number="",
         preferred_price_per_night=3,
         recurrence_of_stay=3,
         business_or_leisure=3,
         hotel_or_villa=3,
-        token_hash=1231241232,
+        token_hash=5396349060120187031,
         avatar_asset_id=1,
     )
     db.add(user)

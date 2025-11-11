@@ -1,10 +1,11 @@
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select
-from typing import List, Optional
-from datetime import datetime, timedelta
 import time
+from datetime import datetime, timedelta
+from typing import List, Optional
 
-from ..models import Session, Hotel, Message
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from ..models import Hotel, Message, Session
 
 
 async def get_sessions(db: AsyncSession, limit: int = 5) -> List[Session]:
@@ -193,3 +194,15 @@ async def update_session_status(
     await db.flush()
     await db.refresh(session)
     return session
+
+
+async def get_messages_for_session(
+    session: Session,
+    db: AsyncSession,
+    limit: int = 10,
+) -> List[Message]:
+    """Get the last message for a session."""
+    await db.refresh(session, ["messages"])
+    if session.messages:
+        return session.messages[-limit:]
+    return []

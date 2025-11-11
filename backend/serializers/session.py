@@ -1,6 +1,8 @@
+from datetime import datetime
+from typing import Any, Dict, List, Optional
+
 from pydantic import BaseModel, ConfigDict
 from pydantic.alias_generators import to_camel
-from typing import Optional, List, Any, Dict
 
 from .hotel import HotelResponse
 
@@ -172,3 +174,13 @@ class UpdateSessionFiltersParameters(BaseModel):
     max_price: int = -1
     min_star_rating: int = -1
     min_review_rating: int = -1
+
+
+class MessageResponse(BaseModel):
+    model_config = ConfigDict(
+        alias_generator=to_camel, from_attributes=True, populate_by_name=True
+    )
+
+    id: int
+    type: int
+    text: str
