@@ -1,6 +1,7 @@
-from pydantic import BaseModel, ConfigDict
+from typing import Any, Dict, List
+
+from pydantic import BaseModel, ConfigDict, Field
 from pydantic.alias_generators import to_camel
-from typing import List, Any, Dict
 
 from .review import ReviewResponse
 
@@ -75,3 +76,14 @@ class HotelDetailResponse(BaseModel):
     image_lists: List[str]
     main_image: str
     url: str
+
+
+class HotelFilter(BaseModel):
+    min_price: float | None = None
+    max_price: float | None = None
+    min_stars: int | None = None
+    max_stars: int | None = None
+
+
+class HotelFilterResponse(BaseModel):
+    filter: HotelFilter = Field(..., description="The filter to apply to the hotels")

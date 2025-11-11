@@ -22,6 +22,7 @@ brew services start postgresql
 createdb astra
 ```
 
+
 ### Python Setup
 
 4. Create virtual environment (if not already created):
