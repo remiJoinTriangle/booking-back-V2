@@ -75,7 +75,7 @@ async def create_session(
         filter_max_price=-1,
         min_star_rating=-1,
         min_review_rating=-1.0,
-        number_of_rooms={},
+        number_of_rooms=-1,
     )
 
     db.add(session)
@@ -112,6 +112,7 @@ async def add_message_to_session(
     message: Message,
 ) -> None:
     """Add a message to a session."""
+    await db.refresh(session, ["messages"])
     session.messages.append(message)
     session.last_interacted = int(time.time())
     await db.flush()
