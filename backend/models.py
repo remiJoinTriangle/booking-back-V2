@@ -1,7 +1,10 @@
+from datetime import datetime
+
 from sqlalchemy import (
     JSON,
     BigInteger,
     Boolean,
+    DateTime,
     Double,
     Float,
     ForeignKey,
@@ -14,8 +17,12 @@ from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 
 
 class AstraBase(DeclarativeBase):
-    # FIXME add common columns here
-    pass
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime, default=lambda: datetime.now(), nullable=True
+    )
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime, default=lambda: datetime.now(), nullable=True
+    )
 
 
 # --- Core Tables ---

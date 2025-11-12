@@ -1,7 +1,4 @@
-from typing import Any
-
 from pydantic import BaseModel
-from sqlalchemy.inspection import inspect
 
 
 class HotelFilter(BaseModel):

@@ -1,6 +1,6 @@
 from typing import Any, Dict, List
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 from pydantic.alias_generators import to_camel
 
 from .review import ReviewResponse
@@ -19,8 +19,8 @@ class HotelResponse(BaseModel):
     star_rating: float
     comment_aggregated_rating: float
     count_of_comment: int
-    flag: Dict[str, Any]
-    vibe_flag: Dict[str, Any]
+    flag: int
+    vibe_flag: int
     matching_reason: str
     matching_flag: Dict[str, Any]
     matching_vibe_flag: Dict[str, Any]
@@ -39,8 +39,8 @@ class HotelResponse(BaseModel):
             star_rating=hotel.star_rating,
             comment_aggregated_rating=hotel.comment_aggregated_rating,
             count_of_comment=0,  # TODO: Count reviews
-            flag={},  # TODO: Convert flag to dict
-            vibe_flag={},  # TODO: Convert vibe_flag to dict
+            flag=hotel.flag,
+            vibe_flag=hotel.vibe_flag,  # TODO: Convert vibe_flag to dict
             matching_reason=f"Experience luxury and comfort at {hotel.name}",
             matching_flag={},  # TODO: Calculate matching flags
             matching_vibe_flag={},  # TODO: Calculate matching vibe flags
@@ -76,14 +76,3 @@ class HotelDetailResponse(BaseModel):
     image_lists: List[str]
     main_image: str
     url: str
-
-
-class HotelFilter(BaseModel):
-    min_price: float | None = None
-    max_price: float | None = None
-    min_stars: int | None = None
-    max_stars: int | None = None
-
-
-class HotelFilterResponse(BaseModel):
-    filter: HotelFilter = Field(..., description="The filter to apply to the hotels")

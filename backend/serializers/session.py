@@ -1,4 +1,3 @@
-from datetime import datetime
 from typing import Any, Dict, List, Optional
 
 from pydantic import BaseModel, ConfigDict
@@ -38,7 +37,7 @@ class SessionResponse(BaseModel):
     filter_max_price: int
     min_star_rating: int
     min_review_rating: float
-    number_of_rooms: Optional[List[Dict[str, Any]]] = None
+    number_of_rooms: Optional[int] = None
 
     @classmethod
     def from_orm(cls, session):
@@ -184,3 +183,16 @@ class MessageResponse(BaseModel):
     id: int
     type: int
     text: str
+
+    def to_dict(self):
+        match self.type:
+            case 3:
+                type = "assistant"
+            case 2:
+                type = "user"
+            case _:
+                type = "unknown"
+        return {
+            "type": type,
+            "text": self.text,
+        }

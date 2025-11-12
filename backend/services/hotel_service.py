@@ -1,8 +1,8 @@
-from sqlalchemy import select
+from sqlalchemy import and_, or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from backend.models import Hotel
-from backend.serializers.hotel import HotelFilter
+from backend.services.agentic.serializers import HotelFilter
 
 
 async def get_hotel_by_id(db: AsyncSession, hotel_id: int) -> Hotel | None:
@@ -25,4 +25,13 @@ def apply_filters(query, filters: HotelFilter):
     if filters.max_stars is not None:
         query = query.filter(Hotel.star_rating <= filters.max_stars)
 
+    if filters.cities:
+        city_filters = [
+            and_(
+                Hotel.latitude.between(city[0] - 0.15, city[0] + 0.15),
+                Hotel.longitude.between(city[1] - 0.15, city[1] + 0.15),
+            )
+            for city in filters.cities
+        ]
+        query = query.filter(or_(*city_filters))
     return query

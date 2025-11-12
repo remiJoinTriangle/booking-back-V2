@@ -94,3 +94,31 @@ To apply the migration, run:
 ```bash
 alembic upgrade head
 ```
+
+
+
+# AGENTIC PROCESSING
+
+The agentic processing is done in the `backend/services/agentic` folder.
+
+The graph is defined in the `backend/services/agentic/graph.py` file.
+
+The nodes are defined in the `backend/services/agentic/nodes.py` file.
+
+The serializers for the structured outputs are defined in the `backend/services/agentic/serializers.py` file.
+
+The agents are defined in the `backend/services/agentic/agents.py` file.
+
+## How to add a new node
+
+1. Add the node to the graph in the `backend/services/agentic/graph.py` file.
+2. Add the node function to the nodes list in the `backend/services/agentic/nodes.py` file.
+
+## How to create a new structured agent
+
+1. OPTIONAL: Add a structured output model to the `backend/services/agentic/serializers.py` file.
+2. Add the agent to the `backend/services/agentic/agents.py` file.
+3. Use the agent in the node function in the `backend/services/agentic/nodes.py` file.
+
+
+

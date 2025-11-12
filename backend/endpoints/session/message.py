@@ -13,6 +13,7 @@ from ...serializers import (
     SessionWithHotelsResponse,
 )
 from ...services.agentic.graph import workflow
+from ...services.agentic.nodes import WorkflowState
 from ...services.session_service import (
     add_message_to_session,
     create_message,
@@ -26,7 +27,7 @@ from ...services.session_service import (
 router = APIRouter(prefix="/session", tags=["session"])
 
 
-@router.post("/{session_id}/message", response_model=SessionWithHotelsResponse)
+@router.post("/{session_id}/message", response_model=WorkflowState)
 async def post_message(
     session_id: int,
     arguments: AddSessionMessageParameters,
@@ -74,12 +75,28 @@ async def post_message(
     # Format session response
     session_response = SessionResponse.from_orm(session)
 
-    return SessionWithHotelsResponse(
-        **session_response.model_dump(),
-        message=last_message.text if last_message else None,
-        hotels=formatted_hotels,
-        all_vibes=[],  # TODO: Return all vibes
+    ### AGENTIC PROCESSING ###
+    session = await get_session_by_id(db, session_id)
+    if not session:
+        raise HTTPException(
+            status_code=404, detail=f"Session [{session_id}] does not exist"
+        )
+    previous_messages = await get_messages_for_session(session, db)
+    formatted_messages = [
+        MessageResponse.model_validate(message) for message in previous_messages
+    ]
+    initial_state = WorkflowState(
+        input=arguments.message, previous_messages=formatted_messages
     )
+    result = await workflow.ainvoke(initial_state)  # type: ignore[arg-type]
+    return result
+
+    # return SessionWithHotelsResponse(
+    #     **session_response.model_dump(),
+    #     message=last_message.text if last_message else None,
+    #     hotels=formatted_hotels,
+    #     all_vibes=[],  # TODO: Return all vibes
+    # )
 
 
 @router.get("/{session_id}/message", response_model=List[MessageResponse])
@@ -112,14 +129,17 @@ async def post_message_agentic(
     """
     POST /session/{session_id}/message/agentic - Add a message to a session using agentic processing.
     """
-    initial_state = {"input": arguments.message}
-    result = await workflow.ainvoke(initial_state)  # type: ignore[arg-type]
-    return JSONResponse(
-        content={
-            "message": result.get("route"),
-            "action": result.get("action"),
-            "reformulated": result.get("reformulated"),
-            # "filters": result.get("filters").model_dump(),
-            # "hotels": [hotel.model_dump() for hotel in result.get("hotels")],
-        }
+    session = await get_session_by_id(db, session_id)
+    if not session:
+        raise HTTPException(
+            status_code=404, detail=f"Session [{session_id}] does not exist"
+        )
+    previous_messages = await get_messages_for_session(session, db)
+    formatted_messages = [
+        MessageResponse.model_validate(message) for message in previous_messages
+    ]
+    initial_state = WorkflowState(
+        input=arguments.message, previous_messages=formatted_messages
     )
+    result = await workflow.ainvoke(initial_state)  # type: ignore[arg-type]
+    return result
