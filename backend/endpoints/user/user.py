@@ -14,7 +14,7 @@ from backend.services.user_service import get_current_user
 router = APIRouter(prefix="/user", tags=["user"])
 
 
-@router.get("/me", response_model=UserSerializer)
+@router.get("", response_model=UserSerializer)
 async def get_me(
     user_data=Depends(get_current_user), db: AsyncSession = Depends(get_db)
 ):
