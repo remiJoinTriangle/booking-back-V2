@@ -117,29 +117,3 @@ async def get_message(session_id: int, db: AsyncSession = Depends(get_db)):
     ]
 
     return formatted_messages
-
-
-@router.post("/{session_id}/message/agentic", response_model=MessageResponse)
-async def post_message_agentic(
-    session_id: int,
-    arguments: AddSessionMessageParameters,
-    background: BackgroundTasks = BackgroundTasks(),
-    db: AsyncSession = Depends(get_db),
-):
-    """
-    POST /session/{session_id}/message/agentic - Add a message to a session using agentic processing.
-    """
-    session = await get_session_by_id(db, session_id)
-    if not session:
-        raise HTTPException(
-            status_code=404, detail=f"Session [{session_id}] does not exist"
-        )
-    previous_messages = await get_messages_for_session(session, db)
-    formatted_messages = [
-        MessageResponse.model_validate(message) for message in previous_messages
-    ]
-    initial_state = WorkflowState(
-        input=arguments.message, previous_messages=formatted_messages
-    )
-    result = await workflow.ainvoke(initial_state)  # type: ignore[arg-type]
-    return result
